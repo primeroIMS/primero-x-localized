@@ -64,7 +64,7 @@ if [[ -f "$primero_backup_file" ]]; then
   sudo rm -rf ${primero_backup}
 fi
 
-if [ ! -z "backup_destination" ]
+if [ ! -z "${backup_destination}" ]
   then
   echo "Rsync to ${backup_destination}"
   rsync -avzh --progress ${primero_backup_file} ${backup_destination}
