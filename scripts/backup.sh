@@ -1,7 +1,5 @@
 #! /bin/bash
 
-# APP_ROOT=/home/aespinoza/workspace/primero-v2/ ./backup.sh
-
 set -ex
 
 backup_destination=$1
@@ -30,8 +28,12 @@ source /opt/docker/bin/activate
 echo "Starting postgres backup"
 
 PRIMERO_TAG="${PRIMERO_VERSION}" PRIMERO_POSTGRES_VERSION="${POSTGRES_VERSION}" ./compose.prod.sh run \
-  -v ${HOME}/backups/:/tmp/ -e BACKUP_NAME="${BACKUP_NAME}" postgres bash -c 'pg_dump \
-  --dbname=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOSTNAME}:5432/${POSTGRES_DATABASE} \
+   --rm -v ${HOME}/backups/:/tmp/ -e BACKUP_NAME="${BACKUP_NAME}" postgres bash -c '
+   echo ${POSTGRES_HOSTNAME}:5432:${POSTGRES_DATABASE}:${POSTGRES_USER}:${POSTGRES_PASSWORD} >> ~/.pgpass; \
+   chmod 0600 ~/.pgpass; \
+   export PGPASSFILE=~/.pgpass; \
+   pg_dump \
+   -h ${POSTGRES_HOSTNAME} -U ${POSTGRES_USER} ${POSTGRES_DATABASE} \
   -Z 9 -Fc > /tmp/${BACKUP_NAME}'
 
 echo "Finishing postgres backup"
