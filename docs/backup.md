@@ -32,3 +32,4 @@ Inside you will find the PostgreSQL backup (a file with `dump` extension) and al
 
       save the file. Every day at 1am the script wil be executed and will create a file in the `/dir/where/the/backup/will/be/saved` folder
 
+The first time that the script is executed it will created a file called `.last_time_attachment_backup_executed.lock` in the cloned repo under `scripts` folder. That file saved the last time that the attachment were backed up. If you want to do a full attachment backup from the beginning of time, you can delete that file and run the script again

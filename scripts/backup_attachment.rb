@@ -16,6 +16,7 @@ def write_script_for_records(data, file_name, file_path)
   @output.puts 'begin'
   @output.puts "  puts \"[#{data.record_type}] - Saving attach #{file_name} in record id: #{data.record_id}.\""
   @output.puts '  attachement.save!'
+  @output.puts "  Attachment.find_by(id: #{data.id})&.destroy"
   @output.puts '  current_file.close'
   @output.puts 'rescue StandardError => e'
   @output.puts "  puts \"Cannot attach #{file_name}. Error \#{e.message}\""
@@ -29,7 +30,6 @@ def write_script_for_agency_bulks_exports(data, file_name, file_path)
   @output.puts 'begin'
   @output.puts "  puts \"[#{data.record_type}] - Saving attach #{file_name} fro #{data.name} in record id: #{data.record_id}.\""
   @output.puts '  record.save!'
-  @output.puts "  ActiveStorage::Attachment.find(#{data.id}).destroy"
   @output.puts '  file.close'
   @output.puts 'rescue StandardError => e'
   @output.puts "  puts \"Cannot attach #{file_name}. Error \#{e.message}\""
@@ -40,14 +40,15 @@ def export_files
   lock_file_path = "#{Rails.root}/.last_time_attachment_backup_executed.lock"
   last_time_attachment_backup_executed = File.read(lock_file_path)
   puts "====> #{last_time_attachment_backup_executed}"
-  last_time_attachment_backup_executed = last_time_attachment_backup_executed.presence || Time.now - 1.month
-  puts "Export executed last time: #{last_time_attachment_backup_executed}"
-  blobs = ActiveStorage::Blob.includes(:attachments).where(created_at: last_time_attachment_backup_executed..)
+  condition = last_time_attachment_backup_executed.present? ? { created_at: last_time_attachment_backup_executed.. } : {}
+  puts "Export executed last time: #{last_time_attachment_backup_executed}" if last_time_attachment_backup_executed.present?
+
+  blobs = ActiveStorage::Blob.includes(:attachments).where(condition)
 
   new_time_attachment_backup_executed = Time.now
   backup_path = '/tmp/'
 
-  blobs.find_in_batches(batch_size: 5).with_index(1) do |group, index|
+  blobs.find_in_batches(batch_size: 10).with_index(1) do |group, index|
     puts "Processing group ##{index}"
 
     @output = File.new("#{backup_path}/attachment-#{index}.rb", 'w')
