@@ -8,7 +8,7 @@ script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 : "${APP_ROOT:=/srv/primero}"
 : "${POSTGRES_VERSION:=14}"
 : "${PRIMERO_VERSION:=latest}"
-: "${DATA_ONLY:=--data-only}"
+: "${OPTIONS_PGRESTORE:=--data-only --disable-triggers }"
 
 if [ $# -eq 0 ]; then
     echo "Backup argument required"
@@ -28,7 +28,7 @@ source /opt/docker/bin/activate
 echo "Starting postgres restore"
 
 PRIMERO_TAG="${PRIMERO_VERSION}" PRIMERO_POSTGRES_VERSION="${POSTGRES_VERSION}" ./compose.prod.sh run \
---rm -v ${backup_dir_path}:/tmp/backup/ -e DATA_ONLY_OPTION="${DATA_ONLY}" -e BACKUP_NAME="${backup_file}" \
+--rm -v ${backup_dir_path}:/tmp/backup/ -e DATA_ONLY_OPTION="${OPTIONS_PGRESTORE}" -e BACKUP_NAME="${backup_file}" \
  postgres bash -c '
    echo ${POSTGRES_HOSTNAME}:5432:${POSTGRES_DATABASE}:${POSTGRES_USER}:${POSTGRES_PASSWORD} >> ~/.pgpass; \
    chmod 0600 ~/.pgpass; \
