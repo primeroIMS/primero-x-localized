@@ -1,0 +1,6 @@
+---
+all:
+  hosts:
+    primero-example.com:
+      ansible_user: ubuntu
+
