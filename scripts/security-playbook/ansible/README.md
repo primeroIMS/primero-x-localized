@@ -64,6 +64,12 @@ Update GRUB
 
 Reboot server to reflect changes
 
+### => Clean up unused containers
+
+Periodically you should clean up unused containers by running 
+
+      $ docker container prune -f
+
 ---
 ## Scanning Tools
 

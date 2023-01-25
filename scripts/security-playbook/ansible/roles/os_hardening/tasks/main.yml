@@ -15,9 +15,3 @@
     - lynis
 - name: Enabling unattended upgrades
   command: dpkg-reconfigure --priority=low unattended-upgrades
-- name: Run chkrootkit
-  command: chkrootkit
-  tags: [ never, routine ]
-- name: Remove unused docker containers
-  command: docker container prune -f
-  tags: [ never, routine ]
