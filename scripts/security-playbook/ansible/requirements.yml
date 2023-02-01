@@ -1,4 +1,4 @@
 ---
 collections:
-- name: 'git+https://github.com/dev-sec/ansible-collection-hardening'
-  version: '8.4.0'
+- name: 'git+https://github.com/Quoin/ansible-collection-hardening'
+  version: '8.5.0'

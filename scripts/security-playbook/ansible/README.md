@@ -70,6 +70,29 @@ Periodically you should clean up unused containers by running
 
       $ docker container prune -f
 
+### => Firewall
+
+This play book uses nftables and ufw. If you would like to setup the defaults for primero run the following:
+
+    $ ansible-playbook os_hardening.yml -l $HOST --tags "use-ufw"
+
+By default it will enable ufw, allow all outgoing, deny all incoming except ports 443, 22, and 80.
+
+You can add additional ports/protocols to add by adding the following to your inventory file.
+
+```
+all:
+  hosts:
+    $HOST:
+      ufw_allow_additional_incoming:
+        - { port: $PORT, proto: $PROTOCOL }
+```
+ - $PROTOCOL - any | tcp | udp | esp | ah | gre | igmp
+    
+    ** Be aware that this playbook disables most of these protocols so you will have to make additional configuration changes if using any other than any or tcp.
+
+You can also ssh into the server and add manually add ufw rules. Refer to https://help.ubuntu.com/community/UFW for more info.
+
 ---
 ## Scanning Tools
 
