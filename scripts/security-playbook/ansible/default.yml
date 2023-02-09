@@ -1,0 +1,5 @@
+---
+- hosts: 'all:localhost'
+  roles:
+  - 'os_hardening'
+  - 'ssh_hardening'
