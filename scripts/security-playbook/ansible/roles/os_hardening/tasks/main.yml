@@ -1,0 +1,98 @@
+---
+- name: Include vars
+  include_vars: main.yml
+
+- name: Uninstall iptables
+  apt:
+    name: iptables
+    state: absent
+
+- name: Install nftables and ufw
+  apt:
+    pkg:
+    - nftables
+    - ufw
+
+- name: (ufw) Deny all incoming traffic
+  ufw:
+    rule: deny
+    proto: any
+    direction: in
+  notify:
+    - reload ufw
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- name: (ufw) Allow all outgoing traffic
+  ufw:
+    rule: allow
+    direction: out
+  notify:
+    - reload ufw
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- name: (ufw) Allow default primero ports
+  ufw:
+    rule: "allow"
+    port: "{{ item }}"
+    proto: "tcp"
+  with_items:
+    - "22"
+    - "80"
+    - "443"
+  notify:
+    - reload ufw
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- name: (ufw) Allow additional ports/protos
+  ufw:
+    rule: allow
+    direction: in
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items: "{{ ufw_allow_additional_incoming }}"
+  when: ufw_allow_additional_incoming is defined
+  notify:
+    - reload ufw
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- name: Configure the kernel to keep connections alive when enabling the firewall
+  sysctl:
+    name: net.netfilter.nf_conntrack_tcp_be_liberal
+    value: 1
+    state: present
+    sysctl_set: yes
+    reload: yes
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- name: (ufw) Enable
+  ufw:
+    state: enabled
+    logging: on
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- import_role:
+    name: devsec.hardening.os_hardening
+  when:
+    - inventory_hostname != 'localhost'
+
+- name: Install the packages
+  apt:
+    pkg: 
+    - unattended-upgrades
+    - chkrootkit
+    - lynis
+
+- name: Enabling unattended upgrades
+  command: dpkg-reconfigure --priority=low unattended-upgrades

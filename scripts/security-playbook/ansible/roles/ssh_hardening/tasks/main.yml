@@ -1,0 +1,16 @@
+---
+- name: Include vars
+  include_vars: main.yml
+
+- import_role:
+    name: devsec.hardening.ssh_hardening
+  when:
+    - inventory_hostname != 'localhost'
+
+- name: Adding ssh legal banner
+  copy:
+    dest: "/etc/ssh/banner.txt"
+    content: |
+      {{ ssh_banner_txt }}
+  when:
+    - inventory_hostname != 'localhost'
