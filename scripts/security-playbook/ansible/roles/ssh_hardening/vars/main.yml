@@ -1,0 +1,9 @@
+---
+network_ipv6_enable: false
+ssh_max_auth_retries: 3
+ssh_client_alive_count: 2
+ssh_print_last_log: true
+ssh_max_sessions: 2
+ssh_server_ports: ['22']
+ssh_client_port: 22
+ssh_banner: true
