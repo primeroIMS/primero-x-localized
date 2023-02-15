@@ -49,3 +49,4 @@ Thumbs.db
 *.wmv
 
 scripts/security-playbook/venv
+scripts/.last_time_attachment_backup_executed.lock
