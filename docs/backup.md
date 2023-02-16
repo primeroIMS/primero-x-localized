@@ -1,47 +1,64 @@
 # Primero Database Backup
 
-This instructions needs to be executed in the machine that runs a Dockerized Primero, it is assumed that this machine was provisioned using ansible, therefore it is assumed that there is a user first and a virtualenv created in `/opt/docker/bin/activate`. The resulting backup file will have the following file name format `primero_backup.YYYYMMDD.HHMM.tar.gz`.
-Inside you will find the PostgreSQL backup (a file with `dump` extension) and also a folder called `backup-attachments` where you will find the attachments and its ruby scripts to load them
+These instructions need to be executed on the machine that already runs a Dockerized Primero v2.5+. It is assumed that this machine was provisioned using Ansible, therefore it is assumed that there is:
+- A `primero` system user with uid=1100
+- A Docker Compose virtualenv. Confirm that the file `/opt/docker/bin/activate` exists.
 
-1. Clone this repository in home directory
+The resulting backup file will have the following file name format `primero_backup.YYYYMMDD.HHMM.tar.gz`. Inside you will find:
+-  The PostgreSQL backup (a file with `.dump` extension)
+-  Binary document attachments (photos, PDFs, audio, file exports, agency logos) in the folder `backup-attachments` and the Ruby scripts to load them.
 
-        git clone git@bitbucket.org:quoin/primero-x-localized.git
+1. If you haven't already, clone this repository in the home directory
 
-2. Define where your backups will be storaged, this path will be the param that the backup script recieve.
+        cd ~/
+        git clone https://github.com/primeroIMS/primero-x-localized.git
+
+2. Select a target location for your backups. Make sure that your location will have plenty of storage space!
+   We recommend either:
+   - An external volume mounted as a local directory on your machine.
+   - A remote server accessible over SSH.
+
+    By default, backups will be stored under `~/backups` but this is not recommended.
+    The backup location is passed as an argument to the backup script. For example:
 
         $ ./primero-x-localized/scripts/backup.sh /mnt/primero-backups/
 
+    If you are backing up to a remote SSH server, you will need to generate an SSH key pair on the Primero application server and paste the public key in the `~/.ssh/authorized_keys` file on the backup server.
 
-    The default place will be:
+    To generate the SSH key pair:
 
-        /home/<user>/backups
+        $ ssh-keygen -t ed25519 -C "primero.application.prod"
+        $ ssh-add ~/.ssh/id_ed25519
+        $ cat ~/.ssh/id_ed25519.pub # print the public key to screen
 
-    In case you want to copy the backup in a remote site you need to generate a ssh key and paste the public key in the ~/.ssh/authorized_keys file in the destination server. The param that you will need to pass to the backup script will be:
+    The param that you will need to pass to the backup script will look like:
 
-        $ ssh-add ~/.ssh/key_to_access_to_remote_host
-        $ ./primero-x-localized/scripts/backup.sh <user>@<remote-host>:/home/<user>/
+        $ ./primero-x-localized/scripts/backup.sh <user>@<remote-host>:/home/<user>/backups
+
+    Ensure that the backup directory on the remote machine exists.
 
 
-3. Create a cron job that will run the backup as often as required. For example if we wanted to run it every day at 1am:
+3. Create a cron job that will run the backup according to your backup strategy. For example if you want to run it every day at 1 am:
 
         $ crontab -e
 
-      put the follow line:
+      Enter the following (modify the user and destination!):
 
-        0 1 * * * /home/ubuntu/primero-x-localized/scripts/backup.sh /dir/where/the/backup/will/be/saved
+        0 1 * * * /home/<user>/primero-x-localized/scripts/backup.sh /dir/where/the/backup/will/be/saved
 
-      save the file. Every day at 1am the script wil be executed and will create a file in the `/dir/where/the/backup/will/be/saved` folder
+      and save the file. Every day at 1 am, the script wil be executed and will create a file in the `/dir/where/the/backup/will/be/saved` folder.
 
-The first time that the script is executed it will created a file called `.last_time_attachment_backup_executed.lock` in the cloned repo under `scripts` folder. That file saved the last time that the attachment were backed up. If you want to do a full attachment backup from the beginning of time, you can delete that file and run the script again
+The first time that the script is executed, it will create a file called `.last_time_attachment_backup_executed.lock` in the cloned repo under the `scripts` folder. That file saved the last time that the attachment were backed up. If you want to ensure that every single attachment is in your backup, you can delete `.last_time_attachment_backup_executed.lock` and run the script again.
 
+## Restore a Primero backup ##
 
-## Restore a primero backup ##
+The `scripts/restore.sh` file will load Primero data and attachments in a Primero database.
+Before starting a restore, make sure that you have an empty PostgreSQL Primero database and schema, with the database role permission to load a PostgreSQL backup.
 
-The `scripts/restore.sh` file will load primero data and attachments in a primero database.
-Before start a restore make sure that you have an empty database with the the permission to load a postgres backup. Execute the restore script:
+Execute the restore script. For example:
 
     $ ./primero-x-localized/scripts/restore.sh ~/primero_backup.20221201.0007.tar.gz
 
-This script by default will load only data (using [*pg_restore* flags](https://www.postgresql.org/docs/current/app-pgrestore.html "pg_restore options"): `--data-only --disable-triggers`) in the primero database, in case that you wants to create the schema you can override the options setting the enviroment variable `OPTIONS_PGRESTORE`
+By default, this script will load only data (using [*pg_restore* flags](https://www.postgresql.org/docs/current/app-pgrestore.html) "pg_restore options"): `--data-only --disable-triggers`). If you wants to (re)create the schema, you can override the options setting the environment variable `OPTIONS_PGRESTORE`
 
     $ OPTIONS_PGRESTORE="" ./primero-x-localized/scripts/restore.sh ~/primero_backup.20221201.0007.tar.gz

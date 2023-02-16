@@ -1,30 +1,31 @@
-# Remote Onboarding Pipeline
+# Local Onboard
 
-This pipeline in azure is used to onboard new remote instances
+Primero is deployed to the local server via Ansible, triggered by an Azure pipeline which is part of UNICEF's Primero X service.
 
 ## Requirements
 
-### The following is required before running the pipeline.
+### The following is required before running a local onboard.
 
-#### Provided by the individual performing onboarding
-- [ ] Build agent ip address to be whitelisted by remote server
+#### Provided by the UNICEF Primero Team
+- [ ] UNICEF's Primero X Agent IP addresses.
 
-#### Provided by you
-- [ ] Sudoless server user with ssh access
-- [ ] Properly setup dns. Provide hostname.
-- [ ] Provide if you will use an external postgresql database, If not, a database will be created via docker with generated credentials.
-- [ ] Configuration version/branch and path in repo
-- [ ] Languages to configure
-- [ ] From email address to use for mailer
-- [ ] Whether or not you are using let's encrypt, if not provide the path to the certs
-- [ ] Do you want to show the code of conduct, or data protection ui
-- [ ] Onboarding agency, email, and full name
-- [ ] Admin name, email (used for certbot if using let's encrypt)
-- [ ] A `overrides.env` file will be created when onboarding the first time. You can also create this file before hand. If using a external postgres database this file is needed before the onboarding process can begin. Create a `overrides.env` somewhere and provide the path to that file. This file is used to configure smtp, postgres, and storage.
-  
-  Notes
-  * External database should have a user that has admin privledges. 
-  * Provide the version of postgres if using an external database
+#### Provided by the Local Team
+- [ ] The Primero X Agent IPs must be whitelisted by the remote server for SSH connections over port 22.
+- [ ] Password-less server user with sudo privileges and SSH access.
+- [ ] Properly setup DNS. Provide hostname.
+- [ ] Indicate if you will use an external PostgreSQL database. If not, a database will be created via Docker with generated credentials (not recommended).
+- [ ] The baseline configurations template choice: (CP-IA, GBV). Configurations are staged in UNICEF's primero-x-configuration Git repo. If this onboard is a migration from Tier 3, pick the template that is closest to your current configuration.
+- [ ] Primero Languages (locales)
+- [ ] The email address that Primero system email notifications will be sent from (see below for SMTP details).
+- [ ] Choose if your implementation will use a procured TLS Certificate or [Let's Encrypt](https://letsencrypt.org/). If you are using a procured certificate, it will need to be staged on the local Primero server.
+- [ ] Indicate if the implementation will show the code of conduct or data protection notifications.
+- [ ] The onboarding administrator's agency, email, and full name.
+- [ ] If using Let's Encrypt, provide an IT administrator's name and email for contact if there is a problem with Let'S Encrypt issued certificates.
+- [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, and storage.
+
+  Notes:
+  * External database should have a user that has admin privileges.
+  * TODO: Provide the version of PostgreSQL if using an external database
   <br /><br />
 
   ```
@@ -46,12 +47,12 @@ This pipeline in azure is used to onboard new remote instances
   # Local storage overrides
   #PRIMERO_STORAGE_PATH=
 
-  # Azure storage overrides 
+  # Azure storage overrides
   #PRIMERO_STORAGE_AZ_ACCOUNT=
   #PRIMERO_STORAGE_AZ_KEY=
   #PRIMERO_STORAGE_AZ_CONTAINER=
 
-  # AWS storage overrides 
+  # AWS storage overrides
   #PRIMERO_STORAGE_AWS_ACCESS_KEY=
   #PRIMERO_STORAGE_AWS_SECRET_ACCESS_KEY=
   #PRIMERO_STORAGE_AWS_REGION=
@@ -59,10 +60,9 @@ This pipeline in azure is used to onboard new remote instances
 
   ...
   ```
-
-You can also provide any of this information to the onboarder.
-
 ## Pipeline Library Variables
+
+These are filled out by the UNICEF Primero team to configure the Primero X onboard.
 
 | Variable | Description |
 | --- | --- |
@@ -70,17 +70,17 @@ You can also provide any of this information to the onboarder.
 | ANSIBLE_USER | Sudoless user on remote machine |
 | CONFIGURATION_REPO_GIT_REVISION | Configuration tag/branch |
 | ENV_OVERRIDE_PATH |  Path to overrides.env on remote server |
-| GITOPS_BRANCH | primero-x-devops branch. **Only change for pipelne development** |
-| IMAGE_TAG | Version of primero to use. Version should exist in dockerhub |
+| GITOPS_BRANCH | primero-x-devops branch. **Only change for pipeline development** |
+| IMAGE_TAG | Version of primero to use. Version should exist in Dockerhub |
 | MAILER_DEFAULT_FROM | Mailer from to use for smtp |
-| NGINX_SSL_CERT_PATH | Path to ssl cert |
-| NGINX_SSL_KEY_PATH | Path to ssl key |
+| NGINX_SSL_CERT_PATH | Path to TLS cert |
+| NGINX_SSL_KEY_PATH | Path to TLS key |
 | POSTGRES_CLIENT_VERSION | Postgres version (10\|11\|14) |
 | PRIMERO_CODE_OF_CONDUCT | Display code of conduct ui (true\|false) |
 | PRIMERO_DATA_PROTECTION_CASE_CREATION | Display data protection ui (true\|false) |
 | PRIMERO_DEPLOY_NODB | Bypass creation of a docker db (true\|false) |
 | PRIMERO_HOSTNAME | Primero hostname |
-| PRIMERO_LOCALES | Languages to use in primero, (comma seperated iso codes) |
+| PRIMERO_LOCALES | Languages to use in Primero, (comma separated iso codes) |
 | PRIMERO_ONBOARDING_ADMIN_AGENCY_CODE | Admin agency |
 | PRIMERO_ONBOARDING_ADMIN_AGENCY_NAME | Admin name |
 | PRIMERO_ONBOARDING_ADMIN_EMAIL | Admin email address |
