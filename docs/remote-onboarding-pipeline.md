@@ -10,8 +10,21 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
 - [ ] UNICEF's Primero X Agent IP addresses.
 
 #### Provided by the Local Team
-- [ ] The Primero X Agent IPs must be whitelisted by the remote server for SSH connections over port 22.
-- [ ] Password-less server user with sudo privileges and SSH access.
+- [ ] Default firewall rules
+
+  ** Order of these rules is important. Use the order below.
+  - Open port 80, 443.
+  - The Primero X Agent IPs must be whitelisted by the remote server for SSH connections over port 22.
+  - Allow port 22 for authorized IPs.
+  - Deny all other access on port 22.
+  - Allow all outbound traffic.
+  - Deny all inbound traffic.
+- [ ] Password-less server user with sudo privileges and SSH access. Confirm by logging into your server using `sudo -l`
+  ```
+  Sample output:
+    User [host-user] may run the following commands on [host]:
+    (ALL) NOPASSWD: ALL
+  ```
 - [ ] Properly setup DNS. Provide hostname.
 - [ ] Indicate if you will use an external PostgreSQL database. If not, a database will be created via Docker with generated credentials (not recommended).
 - [ ] The baseline configurations template choice: (CP-IA, GBV). Configurations are staged in UNICEF's primero-x-configuration Git repo. If this onboard is a migration from Tier 3, pick the template that is closest to your current configuration.
@@ -21,7 +34,7 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
 - [ ] Indicate if the implementation will show the code of conduct or data protection notifications.
 - [ ] The onboarding administrator's agency, email, and full name.
 - [ ] If using Let's Encrypt, provide an IT administrator's name and email for contact if there is a problem with Let'S Encrypt issued certificates.
-- [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, and storage.
+- [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, and storage. The permissions for the file should be 600. `chmod 600 ~/overrides.env`
 
   Notes:
   * External database should have a user that has admin privileges.
@@ -30,23 +43,29 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
 
   ```
   # SMTP overrides
-  #SMTP_ADDRESS=
-  #SMTP_PORT=
-  #SMTP_DOMAIN=
-  #SMTP_AUTH=
-  #SMTP_STARTTLS_AUTO=
+  SMTP_ADDRESS=
+  SMTP_PORT=
+  SMTP_DOMAIN=
+  # Usually SMTP_AUTH=login
+  SMTP_AUTH=
+  SMTP_USER=
+  SMTP_PASSWORD=
+  SMTP_STARTTLS_AUTO=true
 
   # Posgresql database overrides
-  #POSTGRES_DATABASE=
-  #POSTGRES_USER=
-  #POSTGRES_PASSWORD=
-  #POSTGRES_HOSTNAME=
-  #POSTGRES_SSL_MODE=
-  #POSTGRES_POOL_NUM=
+  POSTGRES_DATABASE=
+  POSTGRES_USER=
+  POSTGRES_PASSWORD=
+  POSTGRES_HOSTNAME=
+  POSTGRES_SSL_MODE=
+  POSTGRES_POOL_NUM=
+
+  # Options are microsoft, local, aws, amazon, minio
+  PRIMERO_STORAGE_TYPE=
 
   # Local storage overrides
   #PRIMERO_STORAGE_PATH=
-
+  
   # Azure storage overrides
   #PRIMERO_STORAGE_AZ_ACCOUNT=
   #PRIMERO_STORAGE_AZ_KEY=
@@ -58,6 +77,12 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
   #PRIMERO_STORAGE_AWS_REGION=
   #PRIMERO_STORAGE_AWS_BUCKET=
 
+  # Minio storage overrides
+  #PRIMERO_STORAGE_MINIO_ACCESS_KEY=
+  #PRIMERO_STORAGE_MINIO_SECRET_ACCESS_KEY=
+  #PRIMERO_STORAGE_MINIO_REGION=
+  #PRIMERO_STORAGE_MINIO_BUCKET=
+  #PRIMERO_STORAGE_MINIO_ENDPOINT=
   ...
   ```
 ## Pipeline Library Variables
