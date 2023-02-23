@@ -84,8 +84,6 @@
 
 - import_role:
     name: devsec.hardening.os_hardening
-  when:
-    - inventory_hostname != 'localhost'
 
 - name: Install the packages
   apt:
