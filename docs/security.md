@@ -88,7 +88,7 @@ Periodically, you should clean up unused containers on the Local Primero server 
 
 This playbook uses [nftables](https://www.nftables.org/projects/nftables/index.html) and [UFW](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29). If you would like to set up the defaults for Primero, run the following:
 
-    ansible-playbook os_hardening.yml -l primero-example.org T --tags "use-ufw"
+    ansible-playbook os_hardening.yml -l primero-example.org --tags "use-ufw"
 
 
 By default it will enable UFW, allow all outgoing, deny all incoming except ports 443, 22, and 80.

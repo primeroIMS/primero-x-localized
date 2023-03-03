@@ -13,17 +13,6 @@
     - nftables
     - ufw
 
-- name: (ufw) Deny all incoming traffic
-  ufw:
-    rule: deny
-    proto: any
-    direction: in
-  notify:
-    - reload ufw
-  tags:
-  - 'never'
-  - 'use-ufw'
-
 - name: (ufw) Allow all outgoing traffic
   ufw:
     rule: allow
@@ -57,6 +46,17 @@
     proto: "{{ item.proto }}"
   with_items: "{{ ufw_allow_additional_incoming }}"
   when: ufw_allow_additional_incoming is defined
+  notify:
+    - reload ufw
+  tags:
+  - 'never'
+  - 'use-ufw'
+
+- name: (ufw) Deny all incoming traffic
+  ufw:
+    rule: deny
+    proto: any
+    direction: in
   notify:
     - reload ufw
   tags:
