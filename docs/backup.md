@@ -62,3 +62,21 @@ Execute the restore script. For example:
 By default, this script will load only data (using [*pg_restore* flags](https://www.postgresql.org/docs/current/app-pgrestore.html) "pg_restore options"): `--data-only --disable-triggers`). If you wants to (re)create the schema, you can override the options setting the environment variable `OPTIONS_PGRESTORE`
 
     $ OPTIONS_PGRESTORE="" ./primero-x-localized/scripts/restore.sh ~/primero_backup.20221201.0007.tar.gz
+
+After restore a backup you need to do extra steps:
+1. Reset primary key sequence for all the tables in a rails console:
+
+```ruby
+ActiveRecord::Base.connection.tables.each do |table|
+    ActiveRecord::Base.connection.reset_pk_sequence!(table)
+end
+```
+
+2. Regenerate *Locations* options running a rails task in the worker container:
+```
+    $ rails location_files:generate
+```
+  then copy the new files to the other containers
+```
+    $ cp -rv "$APP_ROOT/public/"* "$APP_SHARE_DIR"
+```
