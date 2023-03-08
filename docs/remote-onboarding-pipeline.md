@@ -31,9 +31,10 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
 - [ ] Primero Languages (locales)
 - [ ] The email address that Primero system email notifications will be sent from (see below for SMTP details).
 - [ ] Choose if your implementation will use a procured TLS Certificate or [Let's Encrypt](https://letsencrypt.org/). If you are using a procured certificate, it will need to be staged on the local Primero server.
+  - [ ] If using Let's Encrypt, provide an IT administrator's name and email for contact if there is a problem with Let'S Encrypt issued certificates.
+  - [ ] If using a procured certificate, run `mkdir -p /srv/primero/external-certs` and place them in the `/srv/primero/external-certs` directory on the target machine. This must be done before onboarding an instance.
 - [ ] Indicate if the implementation will show the code of conduct or data protection notifications.
 - [ ] The onboarding administrator's agency, email, and full name.
-- [ ] If using Let's Encrypt, provide an IT administrator's name and email for contact if there is a problem with Let'S Encrypt issued certificates.
 - [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, and storage. The permissions for the file should be 600. `chmod 600 ~/overrides.env`
 
   Notes:
