@@ -66,11 +66,7 @@ By default, this script will load only data (using [*pg_restore* flags](https://
 After restore a backup you need to do extra steps:
 1. Reset primary key sequence for all the tables in a rails console:
 
-```ruby
-ActiveRecord::Base.connection.tables.each do |table|
-    ActiveRecord::Base.connection.reset_pk_sequence!(table)
-end
-```
+    $ rails r ~/primero-x-localized/scripts/reset_pk_sequence.rb
 
 2. Regenerate *Locations* options running a rails task in the worker container:
 ```
