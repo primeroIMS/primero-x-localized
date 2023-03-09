@@ -14,6 +14,7 @@ Playbook utilizes [Ansible Collection - devsec.hardening](https://github.com/quo
     - [Clean up unused containers](#clean-up-unused-containers)
     - [Firewall](#firewall)
   - [Scanning Tools](#scanning-tools)
+  - [Reboot](#reboot)
 
 ---
 ## Setup
@@ -88,7 +89,7 @@ Periodically, you should clean up unused containers on the Local Primero server 
 
 This playbook uses [nftables](https://www.nftables.org/projects/nftables/index.html) and [UFW](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29). If you would like to set up the defaults for Primero, run the following:
 
-    ansible-playbook os_hardening.yml -l primero-example.org T --tags "use-ufw"
+    ansible-playbook os_hardening.yml -l primero-example.org --tags "use-ufw"
 
 
 By default it will enable UFW, allow all outgoing, deny all incoming except ports 443, 22, and 80.
@@ -108,7 +109,17 @@ all:
 
 You can also ssh into the server and add manually add ufw rules. Refer to https://help.ubuntu.com/community/UFW for more info.
 
-Access on port 22 (SSH) should be permitted but restricted. We recommend whitelisting the local Bastion server and the UNICEF Primero X IP (provided by the UNICEF Primero team.)
+Access on port 22 (SSH) should be permitted but restricted. We recommend whitelisting the IP of the local Bastion server and the UNICEF Primero X IP (provided by the UNICEF Primero team). See example below
+
+```
+all:
+  hosts:
+    primero-example.org:
+      ufw_allow_additional_incoming:
+        - { port: 22, proto: any, from_ip: <UNICEF-PRIMERO-X-IP1}
+        - { port: 22, proto: any, from_ip: <UNICEF-PRIMERO-X-IP2}
+        - { port: 22, proto: any, from_ip: <BASTION>}
+```
 
 ---
 ## Scanning Tools
@@ -126,3 +137,9 @@ Chkrootkit checks for signs of a rootkit
     sudo chkrootkit
 
 The output of these scans will indicate remediation steps to the Local Team.
+
+## Reboot
+
+Certain change will require a system reboot to be applied.
+
+    sudo reboot
