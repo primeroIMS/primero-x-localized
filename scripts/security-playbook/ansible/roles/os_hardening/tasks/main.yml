@@ -2,11 +2,6 @@
 - name: Include vars
   include_vars: main.yml
 
-- name: Uninstall iptables
-  apt:
-    name: iptables
-    state: absent
-
 - name: Install nftables and ufw
   apt:
     pkg:
