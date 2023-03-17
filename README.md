@@ -7,7 +7,7 @@ This repository contains documentation and tools that a local team can use to bu
 This documentation contains the following sections:
 - [Preparing your server for connection to Primero](docs/remote-onboarding-pipeline.md)
 - [Security hardening](docs/security.md)
-- [Day-to-day operations](docs/oprations.md)
+- [Day-to-day operations](docs/operations.md)
 - [A sample approach for Primero database backups](docs/backup.md)
 
 ## Contributing
