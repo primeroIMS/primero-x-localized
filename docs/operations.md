@@ -1,6 +1,6 @@
 # Daily Operations
 
-This document describes some basic operations that a local team can perform on their local i production instance of Primero.
+This document describes some basic operations that a local team can perform on their local production instance of Primero.
 
 ## Access to the Server
 
@@ -33,7 +33,7 @@ docker ps
 ```
 This will list all currently running Primero processes. You will see the following containers:
  - `primero_application_1`: This is the core application container that runs the Primero API server.
- - `primero_nginx_1`: This is the Nginx Primero web serer container that proxies requests to the API, hosts static resources, and maintains the TLS endpoints.
+ - `primero_nginx_1`: This is the Nginx Primero web server container that proxies requests to the API, hosts static resources, and maintains the TLS endpoints.
  - `primero_worker_1`: This is the queue worker process in charge of executing batch jobs, asynchronous processes, file exports, sending email etc.
  - `primero_solr_1`: This is the search service index, responsible for record search, phonetic search, duplicate detection
  - `primero_postgres_1`: (Optional) This is the Primero database. Note that it is not recommended to run a local Tier 4 deployment with a Docker-managed database. Instead, if possible, you should leverage an external managed service.
@@ -61,7 +61,7 @@ The following commands can be run to check the health and usage of system resour
  ```
  df -kh
  ```
- Primero will use disk space if the database is running on the same **Production Server**, if the file storage is located on the same server, or there are old, unused Primero Docker images.
+ Primero will use disk space if the database is running on the same **Production Server**, if the primero attachment storage (photos, PDFs) is located on the same server, or there are old, unused Primero Docker images.
 
  To check for unused Docker images, list the images and look for images with tag versions different than the current running version:
  ```
@@ -85,7 +85,11 @@ Note that `primero_postgres_1` should be omitted if the database is not running 
 
 You can view the logs of the currently running containers:
 ```
-docker logs <container-name> # for example, primero_application_1
+docker logs <container-name>
+```
+To view the logs in real time use the `-f` parameter. For example:
+```
+docker logs -f primero_application_1
 ```
 
 The default Docker logger driver is `journald`. To view all logs from the last 3 months:
