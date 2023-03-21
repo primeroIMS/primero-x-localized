@@ -66,7 +66,7 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
 
   # Local storage overrides
   #PRIMERO_STORAGE_PATH=
-  
+
   # Azure storage overrides
   #PRIMERO_STORAGE_AZ_ACCOUNT=
   #PRIMERO_STORAGE_AZ_KEY=
@@ -114,9 +114,3 @@ These are filled out by the UNICEF Primero team to configure the Primero X onboa
 | PRIMERO_SAAS_ADMIN_EMAIL | Email address of server admin |
 | RELATIVE_CONFIGURATION_PATH | Path to configuration in git repo |
 | USE_LETS_ENCRYPT | Use Let's Encrypt (true\|false) |
-
-## Onboarding
-
-1. Fill out the library variables for remote-prod-pipeline-variables
-2. Ensure everything needed is in place
-3. Run remote onboarding pipeline (Select master branch, remote-prod-pipeline-variables variables group)
