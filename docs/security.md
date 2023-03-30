@@ -42,6 +42,8 @@ Edit or create an inventory file in the `inventory/` dir. There will be an examp
       hosts:
         primero-example.org:
           ansible_user: ubuntu
+        localhost:
+          ansible_user: ubuntu
 
   ** Any overrides from the ansible-collection-hardening collection can be placed here.
 
@@ -56,6 +58,16 @@ Run the Ansible playbooks
     # Run only ssh hardening
     ansible-playbook ssh_hardening.yml -l primero-example.org
 
+These playbooks can be also applied to the Bastion server to improve the security on it:
+
+    # Runs both os and ssh hardening
+    ansible-playbook default.yml -l localhost
+
+    # Run only os hardening
+    ansible-playbook os_hardening.yml -l localhost
+
+    # Run only ssh hardening
+    ansible-playbook ssh_hardening.yml -l localhost
 ---
 
 See [here](https://github.com/Quoin/ansible-collection-hardening/tree/master/roles/os_hardening) for the list of security items applied.
@@ -124,7 +136,7 @@ all:
 ---
 ## Scanning Tools
 
-This playbook installs both [Lynis](https://cisofy.com/lynis/) and [Chkrootkit](http://www.chkrootkit.org/).
+OS hardening playbook installs both [Lynis](https://cisofy.com/lynis/) and [Chkrootkit](http://www.chkrootkit.org/).
 
 **Both packages should be ran from target machine and require sudo privileges**
 
