@@ -16,7 +16,6 @@ def write_script_for_records(data, file_name, file_path)
   @output.puts 'begin'
   @output.puts "  puts \"[#{data.record_type}] - Saving attach #{file_name} in record id: #{data.record_id}.\""
   @output.puts '  attachement.save!'
-  @output.puts "  Attachment.find_by(id: #{data.id})&.destroy"
   @output.puts '  current_file.close'
   @output.puts 'rescue StandardError => e'
   @output.puts "  puts \"Cannot attach #{file_name}. Error \#{e.message}\""

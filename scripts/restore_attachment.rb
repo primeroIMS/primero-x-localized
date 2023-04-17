@@ -1,6 +1,13 @@
 #! /usr/bin/env ruby
 
-puts 'Starting Atachments Restore'
+puts 'Wiping out Attachmnets tables'
+
+ActiveRecord::Base.connection.execute('DELETE FROM active_storage_variant_records')
+ActiveRecord::Base.connection.execute('DELETE FROM active_storage_blobs')
+ActiveRecord::Base.connection.execute('DELETE FROM active_storage_attachments')
+ActiveRecord::Base.connection.execute('DELETE FROM attachments')
+
+puts 'Starting Attachments Restore'
 
 Dir['/tmp/backup-attachments/*.rb'].each do |file_path|
   puts '-----------------------------------------------'
