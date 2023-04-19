@@ -48,7 +48,7 @@ sudo touch ${script_dir}/.last_time_attachment_backup_executed.lock
 sudo chown primero:primero ${script_dir}/.last_time_attachment_backup_executed.lock
 sudo chown primero:primero ${script_dir}/backup_attachment.rb
 
-SCRIPT_DIR="${script_dir}" PRIMERO_STORAGE="${PRIMERO_STORAGE}" ./compose.prod.sh  -f ${script_dir}/docker-compose.backup.yml run --rm backup bash -c 'ls -la && rails r backup_attachment.rb'
+SCRIPT_DIR="${script_dir}" HOME_DIR="${HOME_DIR}" PRIMERO_STORAGE="${PRIMERO_STORAGE}" ./compose.prod.sh  -f ${script_dir}/docker-compose.backup.yml run --rm backup bash -c 'ls -la && rails r backup_attachment.rb'
 
 echo "Finishing postgres backup"
 
