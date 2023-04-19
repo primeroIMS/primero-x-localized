@@ -3,9 +3,9 @@
 puts 'Wiping out Attachmnets tables'
 
 ActiveRecord::Base.connection.execute('DELETE FROM active_storage_variant_records')
-ActiveRecord::Base.connection.execute('DELETE FROM active_storage_blobs')
 ActiveRecord::Base.connection.execute('DELETE FROM active_storage_attachments')
 ActiveRecord::Base.connection.execute('DELETE FROM attachments')
+ActiveRecord::Base.connection.execute('DELETE FROM active_storage_blobs')
 
 puts 'Starting Attachments Restore'
 
