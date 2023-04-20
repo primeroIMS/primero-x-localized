@@ -40,6 +40,7 @@ PRIMERO_TAG="${PRIMERO_VERSION}" PRIMERO_POSTGRES_VERSION="${POSTGRES_VERSION}" 
   /tmp/backup/${BACKUP_NAME}' || true
 
 echo "Postgres restore done"
+sudo chown primero:primero ${script_dir}/restore_attachment.rb
 
 ./compose.prod.sh run --rm -v ${script_dir}/restore_attachment.rb:/srv/primero/application/restore_attachment.rb \
 -v ${backup_dir_path}/backup-attachments:/tmp/backup-attachments/ \
