@@ -18,6 +18,12 @@ The resulting backup file will have the following file name format `primero_back
    - An external volume mounted as a local directory on your machine.
    - A remote server accessible over SSH.
 
+    Before the backup is started, check the current number of records. This will help us to verify that everything was restored correctly.
+
+    ```
+    $ rails r ~/primero-x-localized/scripts/table_row_counter.rb
+    ```
+
     By default, backups will be stored under `~/backups` but this is not recommended.
     The backup location is passed as an argument to the backup script. For example:
 
@@ -66,7 +72,9 @@ By default, this script will load only data (using [*pg_restore* flags](https://
 After restore a backup you need to do extra steps:
 1. Reset primary key sequence for all the tables in a rails console:
 
+```
     $ rails r ~/primero-x-localized/scripts/reset_pk_sequence.rb
+``` 
 
 2. Regenerate *Locations* options running a rails task in the worker container:
 ```
@@ -75,4 +83,9 @@ After restore a backup you need to do extra steps:
   then copy the new files to the other containers
 ```
     $ cp -rv "$APP_ROOT/public/"* "$APP_SHARE_DIR"
+```
+
+3. Verifiy the number of generated records:
+```
+$ rails r ~/primero-x-localized/scripts/table_row_counter.rb
 ```
