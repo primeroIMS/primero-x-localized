@@ -3,7 +3,8 @@
 set -ex
 
 backup_file=$1
-script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+: "${HOME_DIR:=${HOME}}"
+script_dir="${HOME_DIR}/primero-x-localized/scripts"
 
 : "${APP_ROOT:=/srv/primero}"
 : "${POSTGRES_VERSION:=14}"
