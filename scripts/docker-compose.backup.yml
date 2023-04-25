@@ -4,7 +4,7 @@ services:
   backup:
     image: '${PRIMERO_IMAGE_REPOSITORY:-primeroims}/application:${PRIMERO_TAG:-latest}'
     volumes:
-      - ${HOME}/backups/backup-attachments:/tmp/
+      - ${HOME_DIR}/backups/backup-attachments:/tmp/
       - ${SCRIPT_DIR}/backup_attachment.rb:/srv/primero/application/backup_attachment.rb
       - ${SCRIPT_DIR}/.last_time_attachment_backup_executed.lock:/srv/primero/application/.last_time_attachment_backup_executed.lock
       - ${PRIMERO_STORAGE}:/srv/primero/application/storage

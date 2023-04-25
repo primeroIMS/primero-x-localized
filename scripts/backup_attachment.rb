@@ -60,7 +60,7 @@ def export_files
         backup_record_path = "#{backup_path}/#{attachment_record.record_type}/#{attachment_record.record_id}"
         FileUtils.mkdir_p(backup_record_path)
         file_path = "#{backup_record_path}/#{blob.filename}"
-        write_script_for_attachment(attachment.record_type, attachment_record, blob.filename.to_s)
+        write_script_for_attachment(attachment.record_type, attachment_record, blob.filename.to_s.gsub("'", %q(\\\')).gsub('"', '\"'))
         puts "Saving #{file_path}"
         File.open(file_path, 'wb') do |file|
           file.write(blob.download)
