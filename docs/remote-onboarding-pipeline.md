@@ -86,6 +86,8 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
   #PRIMERO_STORAGE_MINIO_ENDPOINT=
   ...
   ```
+### Configuration repo
+In case you want to use another __primero_configuration_repo__, it must not be a private repository, because we do not handle 'secrets' in our inventory file.
 ## Pipeline Library Variables
 
 These are filled out by the UNICEF Primero team to configure the Primero X onboard.
