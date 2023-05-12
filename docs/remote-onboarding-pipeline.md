@@ -27,7 +27,7 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
   ```
 - [ ] Properly setup DNS. Provide hostname.
 - [ ] Indicate if you will use an external PostgreSQL database. If not, a database will be created via Docker with generated credentials (not recommended).
-- [ ] The baseline configurations template choice: (CP-IA, GBV). Configurations are staged in UNICEF's primero-x-configuration Git repo. If this onboard is a migration from Tier 3, pick the template that is closest to your current configuration.
+- [ ] The baseline configurations template choice: (CP-IA, GBV, MRM). Configurations are staged in UNICEF's primero-x-configuration Git repo. If this onboard is a migration from Tier 3, pick the template that is closest to your current configuration. In case you want to use another repository, it should not be a private repository, because we do not handle 'secrets' in our inventory file.
 - [ ] Primero Languages (locales)
 - [ ] The email address that Primero system email notifications will be sent from (see below for SMTP details).
 - [ ] Choose if your implementation will use a procured TLS Certificate or [Let's Encrypt](https://letsencrypt.org/). If you are using a procured certificate, it will need to be staged on the local Primero server.
