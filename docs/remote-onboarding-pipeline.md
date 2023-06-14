@@ -32,7 +32,7 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
 - [ ] The email address that Primero system email notifications will be sent from (see below for SMTP details).
 - [ ] Choose if your implementation will use a procured TLS Certificate or [Let's Encrypt](https://letsencrypt.org/). If you are using a procured certificate, it will need to be staged on the local Primero server.
   - [ ] If using Let's Encrypt, provide an IT administrator's name and email for contact if there is a problem with Let'S Encrypt issued certificates.
-  - [ ] If using a procured certificate, run `mkdir -p /srv/primero/external-certs` and place them in the `/srv/primero/external-certs` directory on the target machine. This must be done before onboarding an instance.
+  - [ ] If using a procured certificate, run `mkdir -p /srv/external-certs` and place them in the `/srv/external-certs` directory on the target machine. This must be done before onboarding an instance. Both files (cert and key) must have 755 permission.
 - [ ] Indicate if the implementation will show the code of conduct or data protection notifications.
 - [ ] The onboarding administrator's agency, email, and full name.
 - [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, and storage. The permissions for the file should be 600. `chmod 600 ~/overrides.env`
@@ -99,12 +99,12 @@ These are filled out by the UNICEF Primero team to configure the Primero X onboa
 | GITOPS_BRANCH | primero-x-devops branch. **Only change for pipeline development** |
 | IMAGE_TAG | Version of primero to use. Version should exist in Dockerhub |
 | MAILER_DEFAULT_FROM | Mailer from to use for smtp |
-| NGINX_SSL_CERT_PATH | Path to TLS cert |
-| NGINX_SSL_KEY_PATH | Path to TLS key |
+| NGINX_SSL_CERT_PATH | Path to tls cert on remote server. <br>Set to `/etc/letsencrypt/live/primero/fullchain.pem` if using Let's Encrypt. <br>Set to `/external-certs/$CERT_FILE` if using external tls. |
+  | NGINX_SSL_KEY_PATH | Path to tls key on remote server. <br>Set to `/etc/letsencrypt/live/primero/privkey.pem` if using Let's Encrypt. <br> Set to `/external-certs/$KEY_FILE` if using external tls. |
 | POSTGRES_CLIENT_VERSION | Postgres version (10\|11\|14) |
 | PRIMERO_CODE_OF_CONDUCT | Display code of conduct ui (true\|false) |
 | PRIMERO_DATA_PROTECTION_CASE_CREATION | Display data protection ui (true\|false) |
-| PRIMERO_DEPLOY_NODB | Bypass creation of a docker db (true\|false) |
+| PRIMERO_DEPLOY_NODB | Set to `true` to deploy using an external database. <br>Set to `false` to run the database in Docker |
 | PRIMERO_HOSTNAME | Primero hostname |
 | PRIMERO_LOCALES | Languages to use in Primero, (comma separated iso codes) |
 | PRIMERO_ONBOARDING_ADMIN_AGENCY_CODE | Admin agency |
