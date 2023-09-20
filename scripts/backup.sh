@@ -21,10 +21,10 @@ default_backup_attachment_dir="${HOME_DIR}/backups/backup-attachments"
 : "${PRIMERO_VERSION:=latest}"
 : "${PRIMERO_STORAGE:=storage}"
 
-sudo mkdir -p $BACKUP_ATTACHMENT_DIR
-sudo chown -R primero:primero $BACKUP_DIR
+mkdir -p $BACKUP_ATTACHMENT_DIR
+chown -R primero:primero $BACKUP_DIR
 
-sudo chown -R primero.primero ${script_dir}
+chown -R primero.primero ${script_dir}
 
 cd ${APP_ROOT}/docker
 source /opt/docker/bin/activate
@@ -44,32 +44,32 @@ echo "Finishing postgres backup"
 
 echo "Starting attachment backup"
 
-sudo touch ${script_dir}/.last_time_attachment_backup_executed.lock
-sudo chown primero:primero ${script_dir}/.last_time_attachment_backup_executed.lock
-sudo chown primero:primero ${script_dir}/backup_attachment.rb
+touch ${script_dir}/.last_time_attachment_backup_executed.lock
+chown primero:primero ${script_dir}/.last_time_attachment_backup_executed.lock
+chown primero:primero ${script_dir}/backup_attachment.rb
 
 SCRIPT_DIR="${script_dir}" HOME_DIR="${HOME_DIR}" PRIMERO_STORAGE="${PRIMERO_STORAGE}" ./compose.prod.sh  -f ${script_dir}/docker-compose.backup.yml run --rm backup bash -c 'ls -la && rails r backup_attachment.rb'
 
 echo "Finishing postgres backup"
 
-sudo chown -R ${SUDO_USER}.${SUDO_USER} $BACKUP_DIR
+chown -R ${SUDO_USER}.${SUDO_USER} $BACKUP_DIR
 cd ${BACKUP_DIR}
 
 primero_backup="primero_backup.${current_date}"
 primero_backup_file="${primero_backup}.tar.gz"
 
-sudo mkdir -p ${primero_backup}
-sudo chown -R primero:primero $primero_backup
-sudo mv ${BACKUP_NAME} backup-attachments ${primero_backup}
+mkdir -p ${primero_backup}
+chown -R primero:primero $primero_backup
+mv ${BACKUP_NAME} backup-attachments ${primero_backup}
 
-sudo tar czvf ${primero_backup_file} ${primero_backup}
-sudo chown -R primero:primero $primero_backup_file
+tar czvf ${primero_backup_file} ${primero_backup}
+chown -R primero:primero $primero_backup_file
 echo "Primero backup compressed"
 
 ls -al *.tar.gz
 
 if [[ -f "$primero_backup_file" ]]; then
-  sudo rm -rf ${primero_backup}
+  rm -rf ${primero_backup}
 fi
 
 if [ ! -z "${backup_destination}" ]
