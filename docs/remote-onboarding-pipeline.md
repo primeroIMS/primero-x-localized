@@ -35,11 +35,12 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
   - [ ] If using a procured certificate, run `mkdir -p /srv/primero/external-certs` and place them in the `/srv/primero/external-certs` directory on the target machine. This must be done before onboarding an instance.
 - [ ] Indicate if the implementation will show the code of conduct or data protection notifications.
 - [ ] The onboarding administrator's agency, email, and full name.
-- [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, and storage. The permissions for the file should be 600. `chmod 600 ~/overrides.env`
+- [ ] An `overrides.env` needs to be created in the user home directory (usually `/home/ubuntu/overrides.env`) on the Primero server before the onboard. This file is used to configure SMTP, PostgreSQL, WebPush, and storage. The permissions for the file should be 600. `chmod 600 ~/overrides.env`
 
   Notes:
   * External database should have a user that has admin privileges.
   * TODO: Provide the version of PostgreSQL if using an external database
+  * If you are enabling webpush, add PRIMERO_WEBPUSH, PRIMERO_WEBPUSH_VAPID_PRIVATE and PRIMERO_WEBPUSH_VAPID_PUBLIC in overrides file, then run pipeline either onboard or update. To generate valid VAPID keys, check the steps in [primero README](https://github.com/primeroIMS/primero/blob/main/README.md#using-webpush) file.
   <br /><br />
 
   ```
@@ -84,6 +85,11 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
   #PRIMERO_STORAGE_MINIO_REGION=
   #PRIMERO_STORAGE_MINIO_BUCKET=
   #PRIMERO_STORAGE_MINIO_ENDPOINT=
+
+  # WebPush Notifications
+  #PRIMERO_WEBPUSH=
+  #PRIMERO_WEBPUSH_VAPID_PRIVATE=
+  #PRIMERO_WEBPUSH_VAPID_PUBLIC=
   ...
   ```
 ## Pipeline Library Variables
