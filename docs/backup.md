@@ -29,6 +29,10 @@ The resulting backup file will have the following file name format `primero_back
 
         $ ./primero-x-localized/scripts/backup.sh /mnt/primero-backups/
 
+    In case you need to execute the script using sudo, you need to specify **$HOME_DIR** variable to indicate the home path where primero-x-localized is located
+
+        $ sudo HOME_DIR="/home/ubuntu" ./primero-x-localized/scripts/backup.sh
+
     If you are backing up to a remote SSH server, you will need to generate an SSH key pair on the Primero application server and paste the public key in the `~/.ssh/authorized_keys` file on the backup server.
 
     To generate the SSH key pair:
@@ -42,6 +46,8 @@ The resulting backup file will have the following file name format `primero_back
         $ ./primero-x-localized/scripts/backup.sh <user>@<remote-host>:/home/<user>/backups
 
     Ensure that the backup directory on the remote machine exists.
+
+    If you are using a different port to connect to the remote machine, you can create an alias in the `~/.ssh/config` where you can specify all the required information (port, identity file).
 
 
 3. Create a cron job that will run the backup according to your backup strategy. For example if you want to run it every day at 1 am:
