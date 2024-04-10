@@ -32,11 +32,11 @@ Primero runs on the **Production Server** via Docker containers. Your system use
 docker ps
 ```
 This will list all currently running Primero processes. You will see the following containers:
- - `primero_application_1`: This is the core application container that runs the Primero API server.
- - `primero_nginx_1`: This is the Nginx Primero web server container that proxies requests to the API, hosts static resources, and maintains the TLS endpoints.
- - `primero_worker_1`: This is the queue worker process in charge of executing batch jobs, asynchronous processes, file exports, sending email etc.
- - `primero_solr_1`: This is the search service index, responsible for record search, phonetic search, duplicate detection
- - `primero_postgres_1`: (Optional) This is the Primero database. Note that it is not recommended to run a local Tier 4 deployment with a Docker-managed database. Instead, if possible, you should leverage an external managed service.
+ - `primero-application-1`: This is the core application container that runs the Primero API server.
+ - `primero-nginx-1`: This is the Nginx Primero web server container that proxies requests to the API, hosts static resources, and maintains the TLS endpoints.
+ - `primero-worker-1`: This is the queue worker process in charge of executing batch jobs, asynchronous processes, file exports, sending email etc.
+ - `primero-solr-1`: This is the search service index, responsible for record search, phonetic search, duplicate detection
+ - `primero-postgres-1`: (Optional) This is the Primero database. Note that it is not recommended to run a local Tier 4 deployment with a Docker-managed database. Instead, if possible, you should leverage an external managed service.
 
 If any of the containers above do not show up when running `docker ps` Primero is not functioning properly. The list of necessary containers may change in the future. This documentation will be updated to reflect any changes.
 
@@ -44,7 +44,7 @@ The Docker tag on the container image will indicate the exact Primero version an
 ```
 $ docker ps
 ...
-d11267d2a948   primeroims/application:v2.5.7.3   "/entrypoint.sh prim…"   2 days ago   Up 27 hours    primero_application_1
+d11267d2a948   primeroims/application:v2.5.7.3   "/entrypoint.sh prim…"   2 days ago   Up 27 hours    primero-application-1
 ...
 ```
 
@@ -77,9 +77,9 @@ The following commands can be run to check the health and usage of system resour
 
 To restart the Docker containers:
 ```
-docker restart primero_nginx_1 primero_application_1 primero_worker_1 primero_solr_1 primero_postgres_1
+docker restart primero-nginx-1 primero-application-1 primero-worker-1 primero-solr-1 primero-postgres-1
 ```
-Note that `primero_postgres_1` should be omitted if the database is not running locally via Docker.
+Note that `primero-postgres-1` should be omitted if the database is not running locally via Docker.
 
 ## Viewing Log Files
 
@@ -89,7 +89,7 @@ docker logs <container-name>
 ```
 To view the logs in real time use the `-f` parameter. For example:
 ```
-docker logs -f primero_application_1
+docker logs -f primero-application-1
 ```
 
 The default Docker logger driver is `journald`. To view all logs from the last 3 months:

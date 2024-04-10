@@ -40,6 +40,7 @@ Primero is deployed to the local server via Ansible, triggered by an Azure pipel
   Notes:
   * External database should have a user that has admin privileges.
   * TODO: Provide the version of PostgreSQL if using an external database
+  * If you are enabling Promote Primero configuration, you need to fetch the credentials (PRIMERO_PROMOTE_CONFIG_PROD_BASIC_AUTH) from its corresponding 'demo' instance. Then this can be placed on `~/overrides.env` file.
   * If you are enabling webpush, add PRIMERO_WEBPUSH, PRIMERO_WEBPUSH_VAPID_PRIVATE and PRIMERO_WEBPUSH_VAPID_PUBLIC in overrides file, then run pipeline either onboard or update. To generate valid VAPID keys, check the steps in [primero README](https://github.com/primeroIMS/primero/blob/main/README.md#using-webpush) file.
   <br /><br />
 
