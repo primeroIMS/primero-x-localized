@@ -39,6 +39,7 @@
     direction: in
     port: "{{ item.port }}"
     proto: "{{ item.proto }}"
+    from: "{{item.from_ip}}"
   with_items: "{{ ufw_allow_additional_incoming }}"
   when: ufw_allow_additional_incoming is defined
   notify:
@@ -86,6 +87,7 @@
     - unattended-upgrades
     - chkrootkit
     - lynis
+    - debsums
 
 - name: Enabling unattended upgrades
   command: dpkg-reconfigure --priority=low -f noninteractive unattended-upgrades
