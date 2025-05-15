@@ -9,6 +9,7 @@ This documentation contains the following sections:
 - [Security hardening](docs/security.md)
 - [Day-to-day operations](docs/operations.md)
 - [A sample approach for Primero database backups](docs/backup.md)
+- [Server Upgrade: Ubuntu 20.04 → 24.04](docs/upgrade-ubuntu.md)
 
 ## Contributing
 
@@ -18,4 +19,4 @@ Local teams may wish to share their experience with setting up Localized Primero
 Given that the apt package manage of Ubuntu runs slightly behind the latest version of any package it may be necessary to download the lynis package from source and run the utility from there to get a more thorough system audit.
 
 ## OS Major Release Upgrade notes
-Ubuntu requires that major release upgrades follow the natural upgrade process, i.e. to upgrade from 20.04 to 24.04 there is the step to upgrade 20.04 to 22.04 and then another upgrade is required to upgrade from 22.04 to 24.04. As part of the hardening process certin configuration files are modified for the openssh package. , which, certain configurations are related to the openssh package that gets upgraded between major releases. 
+Ubuntu requires that major release upgrades follow the natural upgrade process, i.e. to upgrade from 20.04 to 24.04 there is the step to upgrade 20.04 to 22.04 and then another upgrade is required to upgrade from 22.04 to 24.04. As part of the hardening process certin configuration files are modified for the openssh package. , which, certain configurations are related to the openssh package that gets upgraded between major releases.
