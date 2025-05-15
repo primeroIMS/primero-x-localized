@@ -10,3 +10,15 @@
     dest: "/etc/ssh/banner.txt"
     content: |
       {{ ssh_banner_txt }}
+
+- name: Adding ssh legal banner to issue
+  copy:
+    dest: "/etc/issue"
+    content: |
+      {{ ssh_banner_txt }}
+
+- name: Adding ssh legal banner to issue.net
+  copy:
+    dest: "/etc/issue.net"
+    content: |
+      {{ ssh_banner_txt }}
