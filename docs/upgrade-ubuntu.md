@@ -8,7 +8,7 @@ Upgrading a production server is a high-risk operation. During the upgrade proce
 
 *   SSH connectivity might be lost, and in worst-case scenarios, you could get locked out of the system.
 
-**Creating snapshots and backups is mandatory before proceeding.**
+**Creating snapshots and backups is mandatory before proceeding.** This is straightforward when using a PaaS service like Azure or AWS. Please make sure you are capable of recovering access to the server or restoring it from backup if you are running on self-operated virtual machine solutions or bare metal hardware.
 
 
 Prerequisites
@@ -54,13 +54,13 @@ Upgrade Steps
 
     sudo do-release-upgrade
 
-*   Carefully review and answer any prompts during the upgrade(see Package Configuration Choices section below).
+*   Carefully review and answer any prompts during the upgrade (see Package Configuration Choices section below).
 
 ### Step 3: Upgrade  ubuntu from 22.04 to 24.04
 
     sudo do-release-upgrade
 
-*   Again, follow on-screen prompts and review suggested changes(see Package Configuration Choices section below).
+*   Again, follow on-screen prompts and review suggested changes (see Package Configuration Choices section below).
 
 
 * * *
