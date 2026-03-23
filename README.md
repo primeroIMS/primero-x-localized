@@ -10,6 +10,7 @@ This documentation contains the following sections:
 - [Day-to-day operations](docs/operations.md)
 - [A sample approach for Primero database backups](docs/backup.md)
 - [Server Upgrade: Ubuntu 20.04 → 24.04](docs/upgrade-ubuntu.md)
+- [Azure](docs/azure.md)
 
 ## Contributing
 
